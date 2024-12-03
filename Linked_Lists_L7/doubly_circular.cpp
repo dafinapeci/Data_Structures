@@ -1,3 +1,4 @@
+//this one is not using active prev node so not usefull but it is doubly and circular
 #define _CRT_SECURE_NO_WARNINGS // Visual Studio kullanıyorsanız bu satır gereklidir.
 #include <stdio.h>
 #include <stdlib.h>
