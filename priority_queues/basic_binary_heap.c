@@ -28,17 +28,23 @@ void percolateDown(int hole) {
 	int tmp = array[hole];
 
 	for (; hole * 2 <= theSize; hole = child) {
-		child = hole * 2;
-		if (child != theSize && array[child + 1] < array[child]) {
-			child++;
-		}
-		if (array[child] < tmp) {
-			array[hole] = array[child];
-		}
-		else {
-			break;
-		}
+	child = hole * 2;
+	if (child != theSize && array[child + 1] < array[child]) { // child != theSize :: to check if we are seeing the last item of the array. 
+								// if we see the last item it means there is no right child to compare
+		child++;
 	}
+	if (array[child] < tmp) {
+		array[hole] = array[child];
+		// If the smaller child is less than tmp (the value at the current hole), 
+		// move the smaller child up to maintain the min-heap property and continue percolating down. 
+		// If tmp is already smaller than or equal to the smaller child, 
+		// the heap property is satisfied at this level, so we exit the loop.
+
+	}
+	else {
+		break;
+	}
+}
 
 	array[hole] = tmp;
 }
@@ -57,7 +63,7 @@ void insert (int x) {
 	hole = ++theSize;
 
 	for (; x < array[hole / 2]; hole /= 2) { // hole/2 is formula i/2 or parent 
-		array[hole] = array[hole / 2];
+		array[hole] = array[hole / 2];  // swap parent and child
 	}
 	array[hole] = x;
 }
