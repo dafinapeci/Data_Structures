@@ -114,3 +114,16 @@ int main() {
 
 	return 0;
 }
+
+
+// locate function
+void locate(char searchedName[]) {
+	int i = first;
+	while (i != EMPTY) {
+		if (linkedList[i].name == searchedName) {
+			printf("\nname found: %s, and its link is: %d\n", searchedName, linkedList[i].link);
+			break;
+		}
+		i = linkedList[i].link;
+	}
+}
