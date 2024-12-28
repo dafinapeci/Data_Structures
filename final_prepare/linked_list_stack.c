@@ -1,4 +1,5 @@
 // Linked List using Stack
+// O(1) for Push and Pop since push and pop happens at the beginning of the list, and instead of head we call it top. so it is easy and not time consuming
 
 #define _CRT_SECURE_NO_WARNINGS 
 #include <stdio.h>
