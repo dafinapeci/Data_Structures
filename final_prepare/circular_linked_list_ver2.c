@@ -9,6 +9,7 @@ typedef struct list_node {
 } list_node;
 
 typedef list_node* list_pointer;
+list_pointer concatenate_circular(list_pointer ptr1, list_pointer ptr2);
 
 // Function to reverse a singly linked list
 list_pointer reverse(list_pointer lead) {
@@ -94,6 +95,61 @@ void print_circular_list(list_pointer ptr) {
     printf("(back to start)\n");
 }
 
+list_pointer searchInt(list_pointer ptr, int searchedValue) {
+    list_pointer temp;
+   
+    if (ptr) {
+        temp = ptr->link;
+        do {
+            if (temp->data == searchedValue) {
+                return temp;
+            }
+            temp = temp->link;
+        } while (temp != ptr->link);
+    }
+
+    return NULL;
+    
+}
+/*
+ Write a function that deletes a node containing a number, num, from a circularly
+linked list. Your function should first search for num.
+*/
+void deleteNode(list_pointer* ptr, int wantedNumber) {
+    if (*ptr) {
+        list_pointer current = (*ptr)->link; // Start at the first node
+        list_pointer prev = *ptr;           // Previous node starts as the last node
+
+        do {
+            if (current->data == wantedNumber) {
+                if (current == *ptr && current->link == *ptr) {
+                    // Case: Deleting the only node in the list
+                    free(current);
+                    *ptr = NULL;
+                    return;
+                }
+                else if (current == *ptr) {
+                    // Case: Deleting the last node
+                    prev->link = current->link;
+                    *ptr = prev; // Update the last node
+                    free(current);
+                    return;
+                }
+                else {
+                    // General case: Deleting a middle or first node
+                    prev->link = current->link;
+                    free(current);
+                    return;
+                }
+            }
+            prev = current;
+            current = current->link;
+        } while (current != (*ptr)->link); // Traverse until we return to the start
+    }
+    printf("Number %d not found in the list.\n", wantedNumber);
+}
+
+
 int main() {
     // Example 1: Reverse a singly linked list
     printf("Example 1: Reverse a singly linked list\n");
@@ -133,5 +189,92 @@ int main() {
     printf("\nExample 4: Find the length of a circular linked list\n");
     printf("Length of circular list: %d\n", length(circular_list));
 
+
+    //int search_value = 60;
+    int search_value = 30;
+    list_pointer result = searchInt(circular_list, search_value);
+
+    if (result) {
+        printf("Value %d found in node with address %p\n", search_value, (void*)result);
+    }
+    else {
+        printf("Value %d not found in the list.\n", search_value);
+    }
+
+    printf("\n\n**********************************************\n\n");
+    // Create two circular lists
+    list_pointer list11 = NULL;
+    list_pointer list22 = NULL;
+
+    insert_front(&list11, create_node(10));
+    insert_front(&list11, create_node(20));
+    insert_front(&list11, create_node(30));
+
+    insert_front(&list22, create_node(40));
+    insert_front(&list22, create_node(50));
+    insert_front(&list22, create_node(60));
+
+    printf("List 1: ");
+    print_circular_list(list11);
+
+    printf("List 2: ");
+    print_circular_list(list22);
+
+    // Concatenate the lists
+    list_pointer concatenated = concatenate_circular(list11, list22);
+    printf("Concatenated list: ");
+    print_circular_list(concatenated);
+
     return 0;
+}
+
+
+// Function to concatenate two circular linked lists where each pointer points 
+// to the last node of the respective list. The concatenated list merges the 
+// two input lists, and the inputs no longer exist as separate lists. 
+// Returns a pointer to the last node of the resulting list.
+
+list_pointer concatenate_circular(list_pointer ptr1, list_pointer ptr2) {
+    // If both lists are empty, the result is also empty
+    if (!ptr1 && !ptr2) return NULL;
+
+    // If only ptr1 is empty, return ptr2 as the result
+    if (!ptr1) return ptr2;
+
+    // If only ptr2 is empty, return ptr1 as the result
+    if (!ptr2) return ptr1;
+
+    // Both lists are non-empty, concatenate them
+    list_pointer temp1 = ptr1->link; // First node of list 1
+    list_pointer temp2 = ptr2->link; // First node of list 2
+
+    // Connect the last node of list 1 to the first node of list 2
+    ptr1->link = temp2;
+
+    // Connect the last node of list 2 to the first node of list 1
+    ptr2->link = temp1;
+
+    // Return the new last node, which is ptr2
+    return ptr2;
+}
+
+
+// Function to reverse the direction of pointers in a circular linked list
+list_pointer reverseCircularList(list_pointer last) {
+    if (last == NULL || last->link == last) {
+        // Empty list or single-node list
+        return last;
+    }
+
+    list_pointer prev = last, curr = last->link, next = NULL;
+
+    do {
+        next = curr->link; // Store the next node
+        curr->link = prev; // Reverse the link
+        prev = curr;       // Move prev forward
+        curr = next;       // Move curr forward
+    } while (curr != last->link); // Stop when we complete the circle
+
+    last->link = prev; // Update the last node's link
+    return prev;       // Return the new last node
 }
