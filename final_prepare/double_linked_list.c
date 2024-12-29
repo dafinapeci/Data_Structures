@@ -1,3 +1,6 @@
+// TO DO
+// write functions: insert at nth position, delete at head, end and nth position
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
