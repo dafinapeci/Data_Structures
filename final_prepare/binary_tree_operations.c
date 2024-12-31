@@ -18,6 +18,7 @@ struct Node* addNode(struct Node* root, int data);
 struct Node* removeNode(struct Node*, int data);
 void removeAllNodes(struct Node** root);
 struct Node* find(struct Node* root, int data);
+int nodeDepth(Node* root, int value, int currentDepth);
 
 int main() {
     struct Node* root = NULL;
@@ -184,5 +185,20 @@ struct Node* find(struct Node* root, int data) {
     }
     else if (data > root->data) {
         return find(root->right, data);
+    }
+}
+
+int nodeDepth(Node* root, int value, int currentDepth) {
+    if (root == NULL) {
+        return -1; // Node not found
+    }
+    if (root->data == value) {
+        return currentDepth;
+    }
+    else if (value < root->data) {
+        return nodeDepth(root->left, value, currentDepth + 1);
+    }
+    else {
+        return nodeDepth(root->right, value, currentDepth + 1);
     }
 }
