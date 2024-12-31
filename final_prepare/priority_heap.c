@@ -133,3 +133,80 @@ void buildHeap() {
 		percolateDown(i);
 	}
 }
+
+
+
+// HEAP SORT
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void Heapify(int A[], int n, int i) {
+    int max = i;               // Initialize the largest as root
+    int left = 2 * i + 1;      // Correct left child index for 0-based array
+    int right = 2 * i + 2;     // Correct right child index for 0-based array
+
+    // Check if the left child exists and is greater than root
+    if (left < n && A[left] > A[max]) {
+        max = left;
+    }
+
+    // Check if the right child exists and is greater than the current max
+    if (right < n && A[right] > A[max]) {
+        max = right;
+    }
+
+    // If the largest is not root
+    if (max != i) {
+        swap(&A[i], &A[max]);  // Swap the current root with the largest child
+        Heapify(A, n, max);    // Recursively heapify the affected subtree
+    }
+}
+
+void BuildMaxHeap(int A[], int n) {
+    // Start from the last non-leaf node and move upwards
+    for (int i = (n / 2) - 1; i >= 0; i--) {
+        Heapify(A, n, i);
+    }
+}
+
+void Heapsort(int A[], int n) {
+    BuildMaxHeap(A, n);
+
+    for (int i = n - 1; i > 0; i--) {
+        // Move maximum element to the end
+        swap(&A[0], &A[i]);
+
+        // Reduce the heap size and heapify the root
+        Heapify(A, i, 0);
+    }
+}
+
+void printArray(int A[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", A[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int A[] = { 12, 11, 13, 5, 6, 7 };
+    int n = sizeof(A) / sizeof(A[0]);
+
+    printf("Unsorted array: \n");
+    printArray(A, n);
+
+    Heapsort(A, n);
+
+    printf("Sorted array: \n");
+    printArray(A, n);
+
+    return 0;
+}
